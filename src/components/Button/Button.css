@@ -1,0 +1,19 @@
+.Button {
+    height: 40px;
+    min-width: 160px;
+    text-align: center;
+    cursor: pointer;
+    box-shadow: none;
+    outline: none;
+    border-radius: 4px;
+}
+
+.Button__Primary {
+    background-color: #575ce5;
+    color: white;
+    border: 1px solid #575ce5;
+}
+.Button__Primary:hover{
+    background-color: rgb(87 92 229 / 95%);
+    border-color: rgb(87 92 229 / 95%);
+}

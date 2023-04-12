@@ -1,0 +1,16 @@
+.Login__page-wrapper{
+    min-height: 100vh;
+    background-color: #575ce5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.Login__form{
+    background-color: white;
+    padding: 40px;
+    border-radius: 4px;
+    width: 100%;
+    max-width: 400px;
+}
