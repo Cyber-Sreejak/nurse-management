@@ -17,3 +17,13 @@
     background-color: rgb(87 92 229 / 95%);
     border-color: rgb(87 92 229 / 95%);
 }
+
+.Button__Danger {
+    background-color: red;
+    color: white;
+    border: 1px solid red;
+}
+.Button__Danger:hover{
+    background-color: rgba(255, 0, 0, 68%);
+    border-color: rgba(255, 0, 0, 68%);
+}

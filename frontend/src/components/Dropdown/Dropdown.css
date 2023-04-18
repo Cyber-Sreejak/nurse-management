@@ -1,0 +1,21 @@
+.Dropdown{
+    display: inline-block;
+    position: relative;
+    margin-left: 400px;
+}
+
+.Dropdown__title{
+    cursor: pointer;
+    padding: 8px 14px;
+}
+
+.Dropdown__content{
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 180px;
+    border: 1px solid grey;
+    padding: 14px;
+    background-color: #FFFFFF;
+    z-index: 4;
+}

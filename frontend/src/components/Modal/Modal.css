@@ -1,0 +1,13 @@
+.Modal{
+    position: fixed;
+    background-color: rgba(0, 0, 0, 35%);
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Modal__content{
+    background-color: #FFFFFF;
+    padding: 40px;
+}

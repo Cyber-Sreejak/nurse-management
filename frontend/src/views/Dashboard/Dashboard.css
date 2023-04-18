@@ -1,0 +1,14 @@
+.Dashboard{
+    background-color: rgba(87, 92, 229, 32%);
+    min-height: 100vh;
+}
+
+.Nurse__list{
+    display: flex;
+    align-items: center;
+    max-width: 800px;
+    margin: 20px auto;
+}
+.Nurse__list>div{
+    padding: 10px;
+}

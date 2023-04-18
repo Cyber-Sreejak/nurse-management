@@ -1,0 +1,20 @@
+.Header{
+    background-color: #575ce5;
+}
+
+.Header__logo{
+    color: #FFFFFF;
+}
+
+.Header__container{
+    display: flex;
+    align-items: center;
+}
+
+.Header__Dropdown{
+    margin-left: auto;
+}
+
+.Header .Dropdown__title{
+    color: #FFFFFF;
+}
