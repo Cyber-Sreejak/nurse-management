@@ -30,7 +30,7 @@ function Dashboard() {
   const [editNurseModalIsOpen, setEditNurseModalIsOpen] = useState(false)
 
   const [addNurseFullName, setAddNurseFullName] = useState("")
-  const [addNurseEmail, setaddNurseEmail] = useState("")
+  const [addNurseEmail, setAddNurseEmail] = useState("")
 
   const [hasAddNurseFullNameError, setHasAddNurseFullNameError] = useState(false);
   const [hasAddNurseEmailError, setHasAddNurseEmailError] = useState(false);
@@ -64,13 +64,13 @@ function Dashboard() {
   }
 
   const handleAddNurseEmailChange = (event) => {
-    setaddNurseEmail(event.target.value)
+    setAddNurseEmail(event.target.value)
   }
 
   const handleAddNurse = () => {
     let currentNurseList = nurseList;
     let newNurse = {
-      id: 5,
+      id: nurseList[nurseList.length - 1].id + 1,
       fullName: "",
       email: ""
     }
@@ -90,6 +90,8 @@ function Dashboard() {
     currentNurseList.push(newNurse);
     setNurseList(currentNurseList);
     handleAddNurseModalToggle();
+    setAddNurseFullName("");
+    setAddNurseEmail("");
   }
 
   const handleDeleteNurse = (id) => {
@@ -138,6 +140,7 @@ function Dashboard() {
 
   return (
     <div className='Dashboard'>
+      {console.log(nurseList, "length")}
       <Header />
       <div className="container">
         <div className='text-right'>
