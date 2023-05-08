@@ -6,6 +6,9 @@ function Modal(props) {
     const { children, handleModalToggle } = props;
     return (
       <div className='Modal'>
+          <div className='Modal__header'>
+            <span onClick={handleModalToggle}>close</span>
+          </div>
           <div className="Modal__content">
               {children}
           </div>

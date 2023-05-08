@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios';
 import Header from '../../components/Header/Header';
 
-import "./Dashboard.css"
 import Button from '../../components/Button/Button';
 import Modal from '../../components/Modal/Modal';
 import Input from '../../components/InputText/Input';
+
+import "./Dashboard.css"
 
 function Dashboard() {
 
@@ -59,6 +60,10 @@ function Dashboard() {
     setaddNurseModalIsOpen(!addNurseModalIsOpen)
   }
 
+  const handleEditNurseModalToggle = () => {
+    setEditNurseModalIsOpen(!editNurseModalIsOpen)
+  }
+
   const handleAddNurseFullNameChange = (event) => {
     setAddNurseFullName(event.target.value)
   }
@@ -87,11 +92,14 @@ function Dashboard() {
     newNurse.fullName = addNurseFullName;
     newNurse.email = addNurseEmail;
 
-    currentNurseList.push(newNurse);
-    setNurseList(currentNurseList);
-    handleAddNurseModalToggle();
-    setAddNurseFullName("");
-    setAddNurseEmail("");
+    
+    if(addNurseFullName && addNurseEmail){
+      currentNurseList.push(newNurse);
+      setNurseList(currentNurseList);
+      setAddNurseFullName("");
+      setAddNurseEmail("");
+      handleAddNurseModalToggle();
+    }
   }
 
   const handleDeleteNurse = (id) => {
@@ -197,7 +205,7 @@ function Dashboard() {
         ): null}
 
         {editNurseModalIsOpen ? (
-          <Modal handleModalToggle={handleAddNurseModalToggle}>
+          <Modal handleModalToggle={handleEditNurseModalToggle}>
             <h3>Edit nurse</h3>
             <div>
             <Input
