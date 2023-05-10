@@ -10,43 +10,66 @@ import "./Dashboard.css"
 
 function Dashboard() {
 
-  const [nurseList, setNurseList] = useState([
-    {
-      id: 1,
-      fullName: "Nurse One",
-      email: "nurseone@email.com"
-    },
-    {
-      id: 2,
-      fullName: "Nurse Two",
-      email: "nursetwo@email.com"
-    },
-    {
-      id: 3,
-      fullName: "Nurse Three",
-      email: "nursethree@email.com"
-    }
-  ])
+  const [nurseList, setNurseList] = useState([])
   const [addNurseModalIsOpen, setaddNurseModalIsOpen] = useState(false)
   const [editNurseModalIsOpen, setEditNurseModalIsOpen] = useState(false)
 
+  //add nurse handlers
   const [addNurseFullName, setAddNurseFullName] = useState("")
   const [addNurseEmail, setAddNurseEmail] = useState("")
+  const [addNurseContact, setAddNurseContact] = useState("")
+  const [addNurseWorkingDays, setAddNurseWorkingDays] = useState("")
+  const [addNurseDutyStartTime, setAddNurseDutyStartTime] = useState("")
+  const [addNurseDutyEndTime, setAddNurseDutyEndTime] = useState("")
 
-  const [hasAddNurseFullNameError, setHasAddNurseFullNameError] = useState(false);
-  const [hasAddNurseEmailError, setHasAddNurseEmailError] = useState(false);
+  const handleAddNurseFullNameChange = (event) => {
+    setAddNurseFullName(event.target.value)
+  }
 
-  const [addNurseFullNameErrorMessage, setAddNurseFullNameErrorMessage] = useState("");
-  const [addNurseEmailErrorMessage, setAddNurseEmailErrorMessage] = useState("");
+  const handleAddNurseEmailChange = (event) => {
+    setAddNurseEmail(event.target.value)
+  }
 
-  const [editNurseId, setEditNurseId] = useState(null)
-  const [editNurseFullName, setEditNurseFullName] = useState("")
-  const [editNurseEmail, setEditNurseEmail] = useState("")
+  const handleAddNurseContactChange = (event) => {
+    setAddNurseContact(event.target.value)
+  }
+
+  const handleAddNurseWorkingDaysChange = (event) => {
+    setAddNurseWorkingDays(event.target.value)
+  }
+
+  const handleAddNurseDutyStartTimeChange = (event) => {
+    setAddNurseDutyStartTime(event.target.value)
+  }
+
+  const handleAddNurseDutyEndTimeChange = (event) => {
+    setAddNurseDutyEndTime(event.target.value)
+  }
+
+  const handleAddNurse = async() => {
+    let payload = {
+        fullName: addNurseFullName,
+        email: addNurseEmail,
+        contact: addNurseContact,
+        workingDays: addNurseWorkingDays,
+        dutyStartTime: addNurseDutyStartTime,
+        dutyEndTime: addNurseDutyEndTime
+    }
+    await axios.post(`http://localhost:8000/nurse/create`, payload)
+    .then(function (response) {
+      console.log(response.data, "response.data")
+      getNurseList()
+      setaddNurseModalIsOpen(false)
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  }
 
   const requiredInputField = "This field is required"
 
   const getNurseList = async() => {
-    await axios.get(`http://localhost:8081/nurse`)
+    await axios.get(`http://localhost:8000/nurse/get`)
     .then(function (response) {
       console.log(response.data, "response.data")
       setNurseList(response.data)
@@ -60,68 +83,14 @@ function Dashboard() {
     setaddNurseModalIsOpen(!addNurseModalIsOpen)
   }
 
-  const handleEditNurseModalToggle = () => {
-    setEditNurseModalIsOpen(!editNurseModalIsOpen)
-  }
-
-  const handleAddNurseFullNameChange = (event) => {
-    setAddNurseFullName(event.target.value)
-  }
-
-  const handleAddNurseEmailChange = (event) => {
-    setAddNurseEmail(event.target.value)
-  }
-
-  const handleAddNurse = () => {
-    let currentNurseList = nurseList;
-    let newNurse = {
-      id: nurseList[nurseList.length - 1].id + 1,
-      fullName: "",
-      email: ""
-    }
-    const payload = {addNurseFullName, addNurseEmail}
-    if (addNurseFullName.length === 0){
-      setAddNurseFullNameErrorMessage(requiredInputField)
-    }
-
-    if (addNurseEmail.length === 0){
-      setAddNurseEmailErrorMessage(requiredInputField)
-    }
-    console.log(payload)
-
-    newNurse.fullName = addNurseFullName;
-    newNurse.email = addNurseEmail;
-
-    
-    if(addNurseFullName && addNurseEmail){
-      currentNurseList.push(newNurse);
-      setNurseList(currentNurseList);
-      setAddNurseFullName("");
-      setAddNurseEmail("");
-      handleAddNurseModalToggle();
-    }
-  }
-
-  const handleDeleteNurse = (id) => {
-    let newNurseList = []
-    nurseList.map((nurse) => {
-      if(id !== nurse.id){
-        newNurseList.push(nurse)
-      }
-    })
-    setNurseList(newNurseList)
-  }
-
-  const handleEditNurse = (id) => {
-    setEditNurseId(id)
-    nurseList.map(nurse => {
-      if(id === nurse.id){
-        setEditNurseFullName(nurse.fullName)
-        setEditNurseEmail(nurse.email)
-      }
-    })
-    setEditNurseModalIsOpen(!editNurseModalIsOpen)
-  }
+  //edit nurse handlers
+  const [editNurseId, setEditNurseId] = useState(null)
+  const [editNurseFullName, setEditNurseFullName] = useState("")
+  const [editNurseEmail, setEditNurseEmail] = useState("")
+  const [editNurseContact, setEditNurseContact] = useState("")
+  const [editNurseWorkingDays, setEditNurseWorkingDays] = useState("")
+  const [editNurseDutyStartTime, setEditNurseDutyStartTime] = useState("")
+  const [editNurseDutyEndTime, setEditNurseDutyEndTime] = useState("")
 
   const handleEditNurseFullNameChange = (event) => {
     setEditNurseFullName(event.target.value)
@@ -131,14 +100,82 @@ function Dashboard() {
     setEditNurseEmail(event.target.value)
   }
 
-  const handleSaveEditNurse = () => {
+  const handleEditNurseContactChange = (event) => {
+    setEditNurseContact(event.target.value)
+  }
+
+  const handleEditNurseWorkingDaysChange = (event) => {
+    setEditNurseWorkingDays(event.target.value)
+  }
+
+  const handleEditNurseDutyStartTimeChange = (event) => {
+    setEditNurseDutyStartTime(event.target.value)
+  }
+
+  const handleEditNurseDutyEndTimeChange = (event) => {
+    setEditNurseDutyEndTime(event.target.value)
+  }
+
+  const handleEditNurseModalToggle = () => {
+    setEditNurseModalIsOpen(!editNurseModalIsOpen)
+  }
+
+
+  //edit nurse handlers
+  const [deleteNurseId, setDeleteNurseId] = useState("")
+  const [deleteNurseModalOpen, setDeleteNurseModalOpen] = useState(false)
+
+  const handleDeleteNurse = (id) => {
+    setDeleteNurseModalOpen(true)
+    setDeleteNurseId(id)
+    console.log(id)
+  }
+
+  const handleDeleteNurseConfirm = async(id) => {
+    await axios.delete(`http://localhost:8000/nurse/delete/${id}`)
+    .then(function (response) {
+      console.log(response.data)
+      getNurseList()
+      setDeleteNurseModalOpen(false)
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
+  }
+
+  const handleEditNurse = (id) => {
+    setEditNurseId(id)
     nurseList.map(nurse => {
-      if(editNurseId === nurse.id){
-        nurse.fullName = editNurseFullName;
-        nurse.email = editNurseEmail
+      if(id === nurse._id){
+        setEditNurseFullName(nurse.fullName)
+        setEditNurseEmail(nurse.email)
+        setEditNurseContact(nurse.contact)
+        setEditNurseWorkingDays(nurse.workingDays)
+        setEditNurseDutyStartTime(nurse.dutyStartTime)
+        setEditNurseDutyEndTime(nurse.dutyEndTime)
       }
     })
     setEditNurseModalIsOpen(!editNurseModalIsOpen)
+  }
+
+  const handleSaveEditNurse = async() => {
+    let payload = {
+      fullName: editNurseFullName,
+      email: editNurseEmail,
+      contact: editNurseContact,
+      workingDays: editNurseWorkingDays,
+      dutyStartTime: editNurseDutyStartTime,
+      dutyEndTime: editNurseDutyEndTime
+    }
+    await axios.post(`http://localhost:8000/nurse/update/${editNurseId}`, payload)
+    .then(function (response) {
+      console.log(response.data)
+      getNurseList()
+      setEditNurseModalIsOpen(!editNurseModalIsOpen)
+    })
+    .catch(function (error) {
+      console.log(error);
+    })
   }
 
   useEffect(() => {
@@ -148,7 +185,6 @@ function Dashboard() {
 
   return (
     <div className='Dashboard'>
-      {console.log(nurseList, "length")}
       <Header />
       <div className="container">
         <div className='text-right'>
@@ -167,8 +203,8 @@ function Dashboard() {
                 <span>{nurse.email}</span>
               </div>
               <div>
-                <Button buttonText="Edit" handleClick={() => handleEditNurse(nurse.id)} type="Primary" />
-                <Button buttonText="Delete" handleClick={() => handleDeleteNurse(nurse.id)} type="Danger" />
+                <Button buttonText="Edit" handleClick={() => handleEditNurse(nurse._id)} type="Primary" />
+                <Button buttonText="Delete" handleClick={() => handleDeleteNurse(nurse._id)} type="Danger" />
               </div>
             </div>
           ))}
@@ -184,8 +220,6 @@ function Dashboard() {
               type="text" 
               value={addNurseFullName}
               handleChange={handleAddNurseFullNameChange}
-              isInvalid={hasAddNurseFullNameError}
-              errorMessage={addNurseFullNameErrorMessage}
             />
             <Input
               labelText="Email" 
@@ -194,8 +228,38 @@ function Dashboard() {
               type="email" 
               value={addNurseEmail}
               handleChange={handleAddNurseEmailChange}
-              isInvalid={hasAddNurseEmailError}
-              errorMessage={addNurseEmailErrorMessage}
+            />
+            <Input
+              labelText="Contact" 
+              hasIcon={false} 
+              placeholder="Enter nurse contact number" 
+              type="text" 
+              value={addNurseContact}
+              handleChange={handleAddNurseContactChange}
+            />
+            <Input
+              labelText="Working Days" 
+              hasIcon={false} 
+              placeholder="Enter working days" 
+              type="test" 
+              value={addNurseWorkingDays}
+              handleChange={handleAddNurseWorkingDaysChange}
+            />
+            <Input
+              labelText="Duty start time" 
+              hasIcon={false} 
+              placeholder="Enter dyty start time" 
+              type="text" 
+              value={addNurseDutyStartTime}
+              handleChange={handleAddNurseDutyStartTimeChange}
+            />
+            <Input
+              labelText="Duty end time" 
+              hasIcon={false} 
+              placeholder="Enter dyty end time" 
+              type="email" 
+              value={addNurseDutyEndTime}
+              handleChange={handleAddNurseDutyEndTimeChange}
             />
             <div className="text-center">
               <Button buttonText="Add" handleClick={handleAddNurse} type="Primary" />
@@ -215,8 +279,6 @@ function Dashboard() {
               type="text" 
               value={editNurseFullName}
               handleChange={handleEditNurseFullNameChange}
-              // isInvalid={hasAddNurseFullNameError}
-              // errorMessage={addNurseFullNameErrorMessage}
             />
             <Input
               labelText="Email" 
@@ -225,8 +287,38 @@ function Dashboard() {
               type="email" 
               value={editNurseEmail}
               handleChange={handleEditNurseEmailChange}
-              // isInvalid={hasAddNurseEmailError}
-              // errorMessage={addNurseEmailErrorMessage}
+            />
+            <Input
+              labelText="Contact" 
+              hasIcon={false} 
+              placeholder="Enter nurse contact number" 
+              type="text" 
+              value={editNurseContact}
+              handleChange={handleEditNurseContactChange}
+            />
+            <Input
+              labelText="Working Days" 
+              hasIcon={false} 
+              placeholder="Enter working days" 
+              type="test" 
+              value={editNurseWorkingDays}
+              handleChange={handleEditNurseWorkingDaysChange}
+            />
+            <Input
+              labelText="Duty start time" 
+              hasIcon={false} 
+              placeholder="Enter dyty start time" 
+              type="text" 
+              value={editNurseDutyStartTime}
+              handleChange={handleEditNurseDutyStartTimeChange}
+            />
+            <Input
+              labelText="Duty end time" 
+              hasIcon={false} 
+              placeholder="Enter dyty end time" 
+              type="email" 
+              value={editNurseDutyEndTime}
+              handleChange={handleEditNurseDutyEndTimeChange}
             />
             <div className="text-center">
               <Button buttonText="Save" handleClick={handleSaveEditNurse} type="Primary" />
@@ -234,6 +326,17 @@ function Dashboard() {
             </div>
           </Modal>
         ): null}
+        {deleteNurseModalOpen ? (
+          <Modal handleModalToggle={handleEditNurseModalToggle}>
+            <div className='text-center'>
+              <p>Are you sure you want to<br /> delete the nurse?</p>
+            </div>
+            <div>
+                <Button buttonText="Cancel" handleClick={() => setDeleteNurseModalOpen(false)} type="Primary" />
+                <Button buttonText="Delete" handleClick={() => handleDeleteNurseConfirm(deleteNurseId)} type="Danger" />
+            </div>
+          </Modal>
+        ):null}
       </div>
     </div>
   )

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import axios from 'axios';
+import { Link, useNavigate } from "react-router-dom";
 
 import Button from '../../components/Button/Button';
 import Input from '../../components/InputText/Input';
 import './Login.css';
 
 function Login() {
+    const navigate = useNavigate();
     const [userEmail, setUserEmail] = useState("");
     const [userPassword, setUserPassword] = useState("");
 
@@ -29,19 +31,20 @@ function Login() {
         setPasswordErrorMessage("")
     }
 
-    const handleLoginSubmit = (event) => {
-        let payload = {userEmail, userPassword}
-
-        if (userEmail.length === 0){
-            setEmailErrorMessage(requiredInputField)
+    const handleLoginSubmit = async() => {
+        let payload = {
+            email: userEmail,
+            password: userPassword
         }
-
-        if (userPassword.length === 0){
-            setPasswordErrorMessage(requiredInputField)
-        }
-
-        event.preventDefault()
-        console.log(payload, "payload")
+        await axios.post("http://localhost:8000/auth/login", payload)
+        .then(function (response) {
+            console.log(response.data)
+            localStorage.setItem("token", response.data.token)
+            navigate("/")
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
     }
 
 

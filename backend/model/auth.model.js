@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 const authModel = mongoose.Schema({
-    fullName: String,
+    fullName: {
+        type: String,
+        unique: false,
+        require: true,
+    },
     email: {
         type: String,
         unique: true,
