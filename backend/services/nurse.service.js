@@ -10,6 +10,7 @@ exports.nursePostService = async (req, res, next) => {
       workingDays: req.body.workingDays,
       dutyStartTime: req.body.dutyStartTime,
       dutyEndTime: req.body.dutyEndTime,
+      isRoundingManager: req.body.isRoundingManager,
     });
 
     const response = await nurse.save();
@@ -37,15 +38,6 @@ exports.nurseGetAllService = async (req, res, next) => {
     .catch((err) => res.status(500).json("Error:" + err));
 };
 
-// //get nurse by id of users
-// exports.nurseGetByIdService = async (req, res, next) => {
-//   await NurseModel.find()
-//     .where("contactId")
-//     .equals(req.params.id)
-//     .then((Contact) => res.json(Contact))
-//     .catch((err) => res.status(500).json("Error:" + err));
-// };
-
 //update nurse
 exports.nurseUpdateService = async (req, res, next) => {
   await NurseModel.findById(req.params.id)
@@ -56,6 +48,7 @@ exports.nurseUpdateService = async (req, res, next) => {
       (nurse.workingDays = req.body.workingDays),
       (nurse.dutyStartTime = req.body.dutyStartTime),
       (nurse.dutyEndTime = req.body.dutyEndTime),
+      (nurse.isRoundingManager = req.body.isRoundingManager),
       nurse
         .save()
         .then((nurse) => res.status(200).json("Nurse updated."))

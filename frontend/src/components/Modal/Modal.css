@@ -7,7 +7,12 @@
     align-items: center;
 }
 
+.header{
+    width: 460px;
+}
+
 .Modal__content{
     background-color: #FFFFFF;
     padding: 40px;
+    width: 460px;
 }

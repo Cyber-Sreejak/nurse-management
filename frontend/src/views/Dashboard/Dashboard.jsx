@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header/Header';
-
 import Button from '../../components/Button/Button';
 import Modal from '../../components/Modal/Modal';
 import Input from '../../components/InputText/Input';
@@ -9,7 +9,7 @@ import Input from '../../components/InputText/Input';
 import "./Dashboard.css"
 
 function Dashboard() {
-
+  const navigate = useNavigate();
   const [nurseList, setNurseList] = useState([])
   const [addNurseModalIsOpen, setaddNurseModalIsOpen] = useState(false)
   const [editNurseModalIsOpen, setEditNurseModalIsOpen] = useState(false)
@@ -21,6 +21,7 @@ function Dashboard() {
   const [addNurseWorkingDays, setAddNurseWorkingDays] = useState("")
   const [addNurseDutyStartTime, setAddNurseDutyStartTime] = useState("")
   const [addNurseDutyEndTime, setAddNurseDutyEndTime] = useState("")
+  const [addNurseIsRoundingManager, setAddNurseIsRoundingManager] = useState("")
 
   const handleAddNurseFullNameChange = (event) => {
     setAddNurseFullName(event.target.value)
@@ -46,6 +47,10 @@ function Dashboard() {
     setAddNurseDutyEndTime(event.target.value)
   }
 
+  const handleAddNurseRoundingManager = (event) => {
+    setAddNurseIsRoundingManager(event.target.value);
+  }
+
   const handleAddNurse = async() => {
     let payload = {
         fullName: addNurseFullName,
@@ -53,13 +58,21 @@ function Dashboard() {
         contact: addNurseContact,
         workingDays: addNurseWorkingDays,
         dutyStartTime: addNurseDutyStartTime,
-        dutyEndTime: addNurseDutyEndTime
+        dutyEndTime: addNurseDutyEndTime,
+        isRoundingManager: addNurseIsRoundingManager,
     }
     await axios.post(`http://localhost:8000/nurse/create`, payload)
     .then(function (response) {
       console.log(response.data, "response.data")
       getNurseList()
       setaddNurseModalIsOpen(false)
+      setAddNurseFullName("")
+      setAddNurseEmail("")
+      setAddNurseContact("")
+      setAddNurseWorkingDays("")
+      setAddNurseDutyStartTime("")
+      setAddNurseDutyEndTime("")
+      setAddNurseIsRoundingManager("")
     })
     .catch(function (error) {
       console.log(error);
@@ -91,6 +104,7 @@ function Dashboard() {
   const [editNurseWorkingDays, setEditNurseWorkingDays] = useState("")
   const [editNurseDutyStartTime, setEditNurseDutyStartTime] = useState("")
   const [editNurseDutyEndTime, setEditNurseDutyEndTime] = useState("")
+  const [editNurseIsRoundingManager, setEditNurseIsRoundingManager] = useState("")
 
   const handleEditNurseFullNameChange = (event) => {
     setEditNurseFullName(event.target.value)
@@ -118,6 +132,10 @@ function Dashboard() {
 
   const handleEditNurseModalToggle = () => {
     setEditNurseModalIsOpen(!editNurseModalIsOpen)
+  }
+
+  const handleEditNurseRoundingManager = (event) => {
+    setEditNurseIsRoundingManager(event.target.value);
   }
 
 
@@ -153,6 +171,7 @@ function Dashboard() {
         setEditNurseWorkingDays(nurse.workingDays)
         setEditNurseDutyStartTime(nurse.dutyStartTime)
         setEditNurseDutyEndTime(nurse.dutyEndTime)
+        setEditNurseIsRoundingManager(nurse.isRoundingManager)
       }
     })
     setEditNurseModalIsOpen(!editNurseModalIsOpen)
@@ -165,7 +184,8 @@ function Dashboard() {
       contact: editNurseContact,
       workingDays: editNurseWorkingDays,
       dutyStartTime: editNurseDutyStartTime,
-      dutyEndTime: editNurseDutyEndTime
+      dutyEndTime: editNurseDutyEndTime,
+      isRoundingManager: editNurseIsRoundingManager,
     }
     await axios.post(`http://localhost:8000/nurse/update/${editNurseId}`, payload)
     .then(function (response) {
@@ -179,9 +199,12 @@ function Dashboard() {
   }
 
   useEffect(() => {
-    getNurseList()
-  }, [])
-  
+    const token = localStorage.getItem("token");
+    if(!token){
+      navigate("/login")
+    }
+    getNurseList();
+  }, [])  
 
   return (
     <div className='Dashboard'>
@@ -190,25 +213,41 @@ function Dashboard() {
         <div className='text-right'>
           <Button buttonText="Add Nurse" handleClick={handleAddNurseModalToggle} type="Primary" />
         </div>
-        <div>
-          {nurseList && nurseList.map((nurse, index) => (
-            <div className='Nurse__list' key={index}>
-              <div>
-                <span>{nurse.id}</span>
-              </div>
-              <div>
-                <span>{nurse.fullName}</span>
-              </div>
-              <div>
-                <span>{nurse.email}</span>
-              </div>
-              <div>
-                <Button buttonText="Edit" handleClick={() => handleEditNurse(nurse._id)} type="Primary" />
-                <Button buttonText="Delete" handleClick={() => handleDeleteNurse(nurse._id)} type="Danger" />
-              </div>
-            </div>
-          ))}
-        </div>
+        {nurseList.length > 0 ? (
+          <table style={{width: "100%"}}>
+            <thead>
+              <tr className='Nurse__list'>
+                <th className='text-left' style={{width: "180px"}}>Name</th>
+                <th className='text-left'>Email</th>
+                <th className='text-left'>Status</th>
+                <th className='text-left'>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {nurseList && nurseList.map((nurse, index) => (
+                <tr className='Nurse__list' key={index}>
+                  <td style={{width: "180px"}}>
+                    <span>{nurse.fullName}</span>
+                  </td>
+                  <td>
+                    <span>{nurse.email}</span>
+                  </td>
+                  <td>
+                    <span>{nurse.isRoundingManager}</span>
+                  </td>
+                  <td>
+                    <Button buttonText="Edit" handleClick={() => handleEditNurse(nurse._id)} type="Primary" />
+                    <Button buttonText="Delete" handleClick={() => handleDeleteNurse(nurse._id)} type="Danger" />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ): (
+          <div>
+            <p>The list of your nurse is empty.</p>
+          </div>
+        )}
         {addNurseModalIsOpen ? (
           <Modal handleModalToggle={handleAddNurseModalToggle}>
             <h3>Add nurse</h3>
@@ -261,7 +300,19 @@ function Dashboard() {
               value={addNurseDutyEndTime}
               handleChange={handleAddNurseDutyEndTimeChange}
             />
+            <div>
+              <p>Is nurse rounding manager?</p>
+              <div>
+                <input id="isRoundingManager" checked={addNurseIsRoundingManager === "isRoundingManager"} onChange={handleAddNurseRoundingManager} value="isRoundingManager" type="radio" />
+                <label htmlFor="isRoundingManager">Yes</label>
+              </div>
+              <div>
+                <input id="isNotRoundingManager" checked={addNurseIsRoundingManager === "isNotRoundingManager"} onChange={handleAddNurseRoundingManager} value="isNotRoundingManager" type="radio" />
+                <label htmlFor="isNotRoundingManager">No</label>
+              </div>
+            </div>
             <div className="text-center">
+              <Button buttonText="Cancel" handleClick={handleAddNurseModalToggle} type="Primary" />
               <Button buttonText="Add" handleClick={handleAddNurse} type="Primary" />
             </div>
             </div>
@@ -320,7 +371,19 @@ function Dashboard() {
               value={editNurseDutyEndTime}
               handleChange={handleEditNurseDutyEndTimeChange}
             />
+            <div>
+              <p>Is nurse rounding manager?</p>
+              <div>
+                <input id="isRoundingManager" checked={editNurseIsRoundingManager === "isRoundingManager"} onChange={handleEditNurseRoundingManager} value="isRoundingManager" type="radio" />
+                <label htmlFor="isRoundingManager">Yes</label>
+              </div>
+              <div>
+                <input id="isNotRoundingManager" checked={editNurseIsRoundingManager === "isNotRoundingManager"} onChange={handleEditNurseRoundingManager} value="isNotRoundingManager" type="radio" />
+                <label htmlFor="isNotRoundingManager">No</label>
+              </div>
+            </div>
             <div className="text-center">
+              <Button buttonText="Cancel" handleClick={handleEditNurseModalToggle} type="Primary" />
               <Button buttonText="Save" handleClick={handleSaveEditNurse} type="Primary" />
             </div>
             </div>
@@ -331,7 +394,7 @@ function Dashboard() {
             <div className='text-center'>
               <p>Are you sure you want to<br /> delete the nurse?</p>
             </div>
-            <div>
+            <div className='text-center'>
                 <Button buttonText="Cancel" handleClick={() => setDeleteNurseModalOpen(false)} type="Primary" />
                 <Button buttonText="Delete" handleClick={() => handleDeleteNurseConfirm(deleteNurseId)} type="Danger" />
             </div>

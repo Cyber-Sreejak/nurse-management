@@ -4,7 +4,12 @@ import "./Input.css";
 function Input(props) {
     const {inputClass, labelText, type, hasIcon, value, placeholder, handleChange, isInvalid, errorMessage} = props
 
-    let inputClassName = "InputField"
+    let inputClassName;
+
+    if(type !== "radio"){
+        inputClassName = "InputField"
+    }
+
 
     if(isInvalid || errorMessage) {
         inputClassName = inputClassName + " " + "InputField--error"

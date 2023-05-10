@@ -38,6 +38,8 @@ exports.loginService = async (req, res, next) => {
       if (match) {
         const token = jwt.sign(
           {
+            id: user._id,
+            fullName: user.fullName,
             email: user.email,
             password: user.password,
           },
@@ -50,7 +52,6 @@ exports.loginService = async (req, res, next) => {
         return res.status(200).json({
           message: "Login successful.",
           token: token,
-          id: user._id,
         });
       } else {
         throw new Error("Password does not match");
