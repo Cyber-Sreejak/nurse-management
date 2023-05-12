@@ -253,7 +253,7 @@ function Dashboard() {
                   {nurseList && nurseList.map((nurse, index) => (
                     <tr className='Nurse__list' key={index}>
                       <td style={{width: "180px"}}>
-                        <span onClick={() => handleIsViewNurseModalOpen(nurse._id)}>{nurse.fullName}</span>
+                        <span onClick={() => handleIsViewNurseModalOpen(nurse._id)} style={{textDecoration: "underline", cursor: "pointer"}}>{nurse.fullName}</span>
                       </td>
                       <td>
                         <span>{nurse.email}</span>
@@ -448,7 +448,7 @@ function Dashboard() {
                 </div>
                 <div>
                   <h3>Contact:</h3>
-                  <p>{viewNurseDetails.concat}</p>
+                  <p>{viewNurseDetails.contact}</p>
                 </div>
                 <div>
                   <h3>Working Days:</h3>
