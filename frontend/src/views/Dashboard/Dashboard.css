@@ -12,3 +12,7 @@
 .Nurse__list>td, .Nurse__list>th{
     padding: 10px;
 }
+
+.Dashboard__add-nurse-wrapper{
+    margin: 20px 0;
+}

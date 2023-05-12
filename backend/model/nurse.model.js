@@ -7,7 +7,7 @@ const nursePostModel = mongoose.Schema({
     workingDays: String,
     dutyStartTime: String,
     dutyEndTime: String,
-    isRoundingManager: String,
+    isRoundingManager: Boolean,
 });
 
 nursePostModel.set("timestamps", true);

@@ -4,6 +4,7 @@ const {
   nurseDeleteService,
   nurseUpdateService,
   nurseGetAllService,
+  nurseGetService
 } = require("../services/nurse.service");
 
 const router = express.Router();
@@ -11,6 +12,7 @@ const router = express.Router();
 router.post("/create", nursePostService);
 router.delete("/delete/:id", nurseDeleteService);
 router.get("/get", nurseGetAllService);
-router.post("/update/:id", nurseUpdateService);
+router.put("/update/:id", nurseUpdateService);
+router.get("/getbyid/:id", nurseGetService);
 
 module.exports = router;

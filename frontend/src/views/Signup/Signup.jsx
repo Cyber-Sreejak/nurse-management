@@ -15,6 +15,8 @@ function Signup() {
     const [hasEmailError, setHasEmailError] = useState(false);
     const [hasPasswordError, setHasPasswordError] = useState(false);
 
+    const [signupErrorMessage, setSignupErrorMessage] = useState("")
+
     const handleFullnameInputChange = (event) => {
         setUserFullname(event.target.value);
         setHasFullnameError(false)
@@ -42,7 +44,9 @@ function Signup() {
             navigate("/login")
         })
         .catch(function (error) {
-            console.log(error);
+            setSignupErrorMessage(error.response.data.message)
+            console.log(error.response.data);
+
         })
     }
 
@@ -82,6 +86,7 @@ function Signup() {
                         isInvalid={hasPasswordError}
                     />
                     <div className='text-center'>
+                        {signupErrorMessage ? (<p>{signupErrorMessage}</p>) : null}
                         <Button buttonText="Signup" handleClick={handleSignupSubmit} type="Primary" />
                     </div>
                     <div className='text-center'>

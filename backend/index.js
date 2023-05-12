@@ -14,6 +14,7 @@ const nurseController = require("./controller/nurse.controller");
 const nurseDeleteController = require("./controller/nurse.controller");
 const nurseUpdateController = require("./controller/nurse.controller");
 const nurseGetAllController = require("./controller/nurse.controller");
+const nurseGetByIdService = require("./controller/nurse.controller")
 
 app.use("/auth", authController);
 
@@ -21,6 +22,7 @@ app.use("/nurse", nurseController);
 app.use("/nurse/get", nurseGetAllController);
 app.use("/delete/:id", nurseDeleteController);
 app.use("/update/:id", nurseUpdateController);
+app.use("/getbyid/:id", nurseGetByIdService)
 
 app.use((req, res, next) => {
     res.status(404).json({

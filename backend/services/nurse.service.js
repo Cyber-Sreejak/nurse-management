@@ -3,6 +3,13 @@ const NurseModel = require("../model/nurse.model");
 //add new nurse
 exports.nursePostService = async (req, res, next) => {
   try {
+
+    let isRoundingManagerSelected = false
+
+    if(req.body.isRoundingManager === "isRoundingManager"){
+      isRoundingManagerSelected = true
+    }
+
     const nurse = new NurseModel({
       fullName: req.body.fullName,
       email: req.body.email,
@@ -10,7 +17,7 @@ exports.nursePostService = async (req, res, next) => {
       workingDays: req.body.workingDays,
       dutyStartTime: req.body.dutyStartTime,
       dutyEndTime: req.body.dutyEndTime,
-      isRoundingManager: req.body.isRoundingManager,
+      isRoundingManager: isRoundingManagerSelected,
     });
 
     const response = await nurse.save();
@@ -33,7 +40,7 @@ exports.nurseDeleteService = async (req, res, next) => {
 
 //get all nurses
 exports.nurseGetAllService = async (req, res, next) => {
-  await NurseModel.find()
+  await NurseModel.find().sort({isRoundingManager: 'desc', fullName: 'asc'})
     .then((Nurse) => res.json(Nurse))
     .catch((err) => res.status(500).json("Error:" + err));
 };
@@ -54,5 +61,12 @@ exports.nurseUpdateService = async (req, res, next) => {
         .then((nurse) => res.status(200).json("Nurse updated."))
         .catch((err) => res.status(400).json("Error:" + err));
     })
+    .catch((err) => res.status(500).json("Error:" + err));
+};
+
+//getnurse by id
+exports.nurseGetService = async (req, res, next) => {
+  await NurseModel.findById(req.params.id)
+    .then((Nurse) => res.json(Nurse))
     .catch((err) => res.status(500).json("Error:" + err));
 };
